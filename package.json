@@ -1,0 +1,19 @@
+{
+	"name": "securities_portfolio_app",
+	"version": "0.0.1",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"format": "prettier --write \"**/*.{js,ts}\" --ignore-path .prettierignore",
+		"lint": "eslint . --ext .js,.ts"
+	},
+	"keywords": [],
+	"author": "Alex Orekhov <<alex.everget161@gmail.com>> (https://github.com/everget)",
+	"license": "MIT",
+	"devDependencies": {
+		"eslint": "^8.56.0",
+		"eslint-config-airbnb-base": "^15.0.0",
+		"eslint-config-prettier": "^9.1.0",
+		"prettier": "^3.2.5"
+	}
+}

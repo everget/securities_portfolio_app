@@ -1,0 +1,64 @@
+<table class="table">
+  <tbody>
+    <tr>
+      <td>Всего бумаг:</td>
+      <td
+          ng-bind="vm.totalCount()">
+      </td>
+    </tr>
+    <tr>
+      <td>Прибыльных:</td>
+      <td
+          ng-bind="vm.profitCount">
+      </td>
+    </tr>
+    <tr>
+      <td>Убыточных:</td>
+      <td
+          ng-bind="vm.lossCount">
+      </td>
+    </tr>
+    <tr>
+      <td>Доход / Убыток:</td>
+      <td
+          ng-bind="vm.totalProfit() | currency:'$'">
+      </td>
+    </tr>
+    <tr>
+      <td>Текущая цена портфеля:</td>
+      <td
+          ng-bind="vm.totalPrice() | currency:'$'">
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Распределение стоимости портфеля</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Наименование</th>
+      <th>Процент от стоимости портфеля</th>
+      <th>Стоимость</th>
+      <th>Доход/Убыток</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+        ng-repeat="stock in vm.stocks | orderBy:'-percent'">
+      <td
+          ng-bind="stock.name">
+      </td>
+      <td
+          ng-bind="vm.percentOf(stock)">
+      </td>
+      <td
+          ng-bind="vm.currentPrice(stock) | currency:'$'">
+      </td>
+      <td
+          ng-bind="vm.profitCalc(stock) | currency:'$'">
+      </td>
+    </tr>
+  </tbody>
+</table>
