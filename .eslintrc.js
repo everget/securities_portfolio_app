@@ -1,6 +1,19 @@
 module.exports = {
 	env: {
 		browser: true,
+		es6: true,
 	},
-	extends: ['eslint:recommended', 'eslint-config-airbnb-base', 'eslint-config-prettier'],
+	globals: {
+        angular: 'readonly',
+    },
+	extends: [
+		'eslint:recommended',
+		'airbnb-base',
+		'eslint-config-prettier'
+	],
+	rules: {
+		"no-plusplus": "off",
+		"no-use-before-define": "off",
+		"no-param-reassign": ["error", { "props": false }],
+	},
 };

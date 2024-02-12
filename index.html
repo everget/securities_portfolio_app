@@ -1,22 +1,18 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="{{ currentLanguage }}" ng-app="stockApp">
 <head>
 	<meta charset= "utf-8">
 <!--[if IE ]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	<meta name="HandheldFriendly" content="true">
 <!-- saved from url=(0014)about:internet -->
-
 	<title>Securities Portfolio_App</title>
-
-	<link rel="shortcut icon" href="favicon.ico">
-
+	<link rel="shortcut icon" href="public/favicon.ico">
  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha512-kgrXVPaJi1gUqEbb3lVdpJ3tWjfCfEUGD4tKm5GpUW1Gy6PIq3n89kk0zEIWxgBlfpaZD7lcmTFdHL8u5eSzug==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js" integrity="sha512-+5yvGOmUplqhsKBn7oRlW8+Bci6NMeKV89/tgVrBdOq5fn9ZhG5YPrYIjPcmNbnFKWivz34qjQkLyM5YGn7Q4A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-route.min.js" integrity="sha512-FuOXrQDhj+e+NmiR8ypcg7nbLmbOdV0pJ3aBNxBwDPb+zK258jr5warTQN2n0KmsZvWtZtvs4xKzInjmV/BY0Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+	<script src="public/bundles/bundle.js"></script>
 	<style>
 		.header {
 			padding-top: 14px;
@@ -25,9 +21,14 @@
 			color: #999;
 		}
 
+		.flex-container {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
 		.header-title {
-			display: inline-block;
-			vertical-align: middle;
+			display: block;
 			font-size: 18px;
 			font-weight: bold;
 		}
@@ -44,7 +45,7 @@
 			margin: 0;
 		}
 
-		tr {
+		.table tr {
 			cursor: pointer;
 		}
 
@@ -53,11 +54,12 @@
 		}
 	</style>
 </head>
-<body ng-app="stockApp">
-
+<body>
 <header class="header">
 	<div class="container">
-		<div class="header-title">Калькулятор портфеля ценных бумаг</div>
+		<div class="flex-container">
+			<div class="header-title">{{ 'Securities Portfolio Calculator' | translate }}</div>
+		</div>
 	</div>
 </header>
 
@@ -66,28 +68,28 @@
 
 	<div class="container">
 		<form name="stockForm" class="form-inline" role="form">
-				<input class="form-control" type="text" placeholder="Наименование акции" required
+				<input class="form-control" type="text" placeholder="{{ 'Name of a stock' | translate }}" required
 						ng-model="vm.inputName">
 
-				<input class="form-control" type="number" placeholder="Цена покупки" required
+				<input class="form-control" type="number" placeholder="{{ 'Purchase price' | translate }}" required
 						ng-model="vm.inputPrice">
 
-				<input class="form-control" type="number" placeholder="Количество" required
+				<input class="form-control" type="number" placeholder="{{ 'Quantity' | translate }}" required
 						ng-model="vm.inputQuantity">
 
 				<button class="btn btn-default" type="button" role="button"
 						ng-click="vm.addStock(vm.inputName, vm.inputPrice, vm.inputQuantity)"
-						ng-disabled="!stockForm.$valid">Добавить
+						ng-disabled="!stockForm.$valid">{{ 'Add' | translate }}
 				</button>
 		</form>
 
-		<ul class="nav nav-pills" role="menubar">
+		<ul class="nav nav-pills" role="navigation">
 			<li role="menuitem"
 					ng-repeat="tab in vm.tabs"
 					ng-class="{active: vm.isActiveTab(tab.id)}">
 				<a  ng-href="{{tab.href}}"
-						ng-bind="::tab.title"
 						ng-click="vm.clickOnTab(tab.id)">
+						{{ tab.titleKey | translate }}
 				</a>
 			</li>
 		</ul>
@@ -96,123 +98,5 @@
 
 	</div>
 </main>
-
-<script src="app/stockapp.module.js"></script>
-<script src="app/config/tabs.router.config.js"></script>
-<script src="app/controllers/stocks.controller.js"></script>
-<script src="app/services/stock.service.js"></script>
-<script src="app/services/stocks.collection.factory.js"></script>
-<script src="app/services/tabs.collection.factory.js"></script>
-
-<script type="text/ng-template" id="stocks.table.view.html">
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Наименование</th>
-				<th>Средняя цена</th>
-				<th>Кол-во</th>
-				<th>Тек.цена</th>
-				<th>Доход / Убыток</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="stock in vm.stocks | filter: vm.statusFilter"
-					ng-class="vm.priceHasChanged(stock)">
-				<td ng-bind="stock.name"></td>
-				<td ng-bind="stock.average | currency:'$'"></td>
-				<td ng-bind="stock.quantity"></td>
-				<td>
-					<button class="btn btn-default" type="button"
-							ng-if="stock.isSetPrice"
-							ng-click="vm.setPriceState(stock)">Задать цену
-					</button>
-
-					<form name="currentPriceForm" role="form">
-						<div class="input-group"
-								ng-if="stock.isChangePrice">
-							<input class="form-control" type="number" placeholder="Цена" autofocus required
-									ng-model="stock.newprice">
-							<span class="input-group-btn">
-								<button class="btn btn-default" type="button"
-										ng-click="vm.changePriceState(stock)"
-										ng-disabled="!currentPriceForm.$valid">Ok
-								</button>
-							</span>
-						</div>
-					</form>
-
-					<span title="Кликните для изменения цены"
-								ng-if="stock.isNewPrice"
-								ng-bind="stock.newprice | currency:'$'"
-								ng-click="vm.newPriceState(stock)">
-					</span>
-				</td>
-				<td>
-					<span class="bg-warning"
-							ng-if="stock.isSetPrice || stock.isChangePrice">Сначала задайте цену
-					</span>
-					<span
-							ng-if="stock.isNewPrice"
-							ng-bind="vm.profitCalc(stock) | currency:'$'">
-					</span>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-</script>
-
-<script type="text/ng-template" id="summary.view.html">
-	<table class="table">
-		<tbody>
-			<tr>
-				<td>Всего бумаг:</td>
-				<td ng-bind="vm.totalCount()"></td>
-			</tr>
-			<tr>
-				<td>Прибыльных:</td>
-				<td ng-bind="vm.profitCount"></td>
-			</tr>
-			<tr>
-				<td>Убыточных:</td>
-				<td ng-bind="vm.lossCount"></td>
-			</tr>
-			<tr>
-				<td>Доход / Убыток:</td>
-				<td style="font-weight: bold;"
-						ng-bind="vm.totalProfit() | currency:'$'"
-						ng-class="vm.profitColor">
-				</td>
-			</tr>
-			<tr>
-				<td>Текущая цена портфеля:</td>
-				<td style="font-weight: bold;"
-						ng-bind="vm.totalPrice() | currency:'$'">
-				</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<h3>Распределение стоимости портфеля</h3>
-
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Наименование</th>
-				<th>Процент от стоимости портфеля</th>
-				<th>Стоимость</th>
-				<th>Доход/Убыток</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="stock in vm.stocks | orderBy:'-percent'">
-				<td ng-bind="stock.name"></td>
-				<td ng-bind="vm.percentOf(stock)"></td>
-				<td ng-bind="vm.currentPrice(stock) | currency:'$'"></td>
-				<td ng-bind="vm.profitCalc(stock) | currency:'$'"></td>
-			</tr>
-		</tbody>
-	</table>
-</script>
-
 </body>
 </html>

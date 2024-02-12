@@ -1,0 +1,56 @@
+<table class="table">
+	<thead>
+		<tr>
+			<th>{{ 'Name' | translate }}</th>
+			<th>{{ 'Average price' | translate }}</th>
+			<th>{{ 'Qty' | translate }}</th>
+			<th>{{ 'Current price' | translate }}</th>
+			<th>{{ 'Income/Loss' | translate }}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="stock in vm.stocks | filter: vm.statusFilter"
+				ng-class="vm.priceHasChanged(stock)">
+			<td ng-bind="stock.name"></td>
+			<td ng-bind="stock.average | currency:'$'"></td>
+			<td ng-bind="stock.quantity"></td>
+			<td>
+				<button class="btn btn-default" type="button"
+						ng-if="stock.isSetPrice"
+						ng-click="vm.setPriceState(stock)">
+						{{ 'Set price' | translate }}
+				</button>
+
+				<form name="currentPriceForm" role="form">
+					<div class="input-group"
+							ng-if="stock.isChangePrice">
+						<input class="form-control" type="number" placeholder="{{ 'Price' | translate }}" autofocus required
+								ng-model="stock.newprice">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button"
+									ng-click="vm.changePriceState(stock)"
+									ng-disabled="!currentPriceForm.$valid">Ok
+							</button>
+						</span>
+					</div>
+				</form>
+
+				<span title="{{ 'Click to change price' | translate }}"
+							ng-if="stock.isNewPrice"
+							ng-bind="stock.newprice | currency:'$'"
+							ng-click="vm.newPriceState(stock)">
+				</span>
+			</td>
+			<td>
+				<span class="bg-warning"
+						ng-if="stock.isSetPrice || stock.isChangePrice">
+						{{ 'Set your price first' | translate }}
+				</span>
+				<span
+						ng-if="stock.isNewPrice"
+						ng-bind="vm.profitCalc(stock) | currency:'$'">
+				</span>
+			</td>
+		</tr>
+	</tbody>
+</table>

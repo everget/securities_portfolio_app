@@ -1,0 +1,50 @@
+<table class="table">
+	<tbody>
+		<tr>
+			<td>{{ 'Total papers' | translate }}:</td>
+			<td ng-bind="vm.totalCount()"></td>
+		</tr>
+		<tr>
+			<td>{{ 'Profitable' | translate }}:</td>
+			<td ng-bind="vm.profitCount"></td>
+		</tr>
+		<tr>
+			<td>{{ 'Unprofitable' | translate }}:</td>
+			<td ng-bind="vm.lossCount"></td>
+		</tr>
+		<tr>
+			<td>{{ 'Income/Loss' | translate }}:</td>
+			<td style="font-weight: bold;"
+					ng-bind="vm.totalProfit() | currency:'$'"
+					ng-class="vm.profitColor">
+			</td>
+		</tr>
+		<tr>
+			<td>{{ 'Current portfolio price' | translate }}:</td>
+			<td style="font-weight: bold;"
+					ng-bind="vm.totalPrice() | currency:'$'">
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>{{ 'Portfolio value distribution' | translate }}</h3>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>{{ 'Name' | translate }}</th>
+			<th>{{ 'Percentage of portfolio value' | translate }}</th>
+			<th>{{ 'Value' | translate }}</th>
+			<th>{{ 'Income/Loss' | translate }}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="stock in vm.stocks | orderBy:'-percent'">
+			<td ng-bind="stock.name"></td>
+			<td ng-bind="vm.percentOf(stock)"></td>
+			<td ng-bind="vm.currentPrice(stock) | currency:'$'"></td>
+			<td ng-bind="vm.profitCalc(stock) | currency:'$'"></td>
+		</tr>
+	</tbody>
+</table>
