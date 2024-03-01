@@ -6,11 +6,11 @@
 	"scripts": {
 		"start": "webpack serve",
 		"build": "webpack",
-		"format": "prettier --write \"src/**/*.{js,ts}\" --ignore-path .prettierignore",
+		"format": "prettier \"src/**/*.{js,ts}\" --write --ignore-unknown",
 		"lint": "eslint src --ext .js,.ts"
 	},
 	"keywords": [],
-	"author": "Alex Orekhov <<alex.everget161@gmail.com>> (https://github.com/everget)",
+	"author": "Alex Orekhov <alex.everget161@gmail.com> (https://github.com/everget)",
 	"license": "MIT",
 	"devDependencies": {
 		"eslint": "^8.56.0",
